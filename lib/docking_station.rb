@@ -14,8 +14,8 @@ class DockingStation
   def release_bike
     fail 'No bikes available' if empty?
     fail 'No bikes available' if bikes.all? {|bike| bike.broken?}
-    wb = bikes.reject {|bike| bike.broken?}.pop
-    bikes.delete(wb)
+    working_bike = bikes.reject {|bike| bike.broken?}.pop
+    bikes.delete(working_bike)
   end
 
   def dock bike
@@ -23,7 +23,13 @@ class DockingStation
     bikes << bike
   end
 
-  private
+  def release_broken_bikes
+    broken_bikes = bikes.select {|bike| bike.broken?}
+    bikes.reject! {|bike| bike.broken?} 
+    broken_bikes
+  end
+
+  #private
 
   attr_reader :bikes
 
